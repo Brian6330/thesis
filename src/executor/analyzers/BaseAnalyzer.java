@@ -1,4 +1,4 @@
-package analyzer;
+package executor.analyzers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-import executor.ResultCollector;
+import executor.collectors.ResultCollector;
 
 public abstract class BaseAnalyzer {
 	
@@ -24,8 +24,6 @@ public abstract class BaseAnalyzer {
 	protected abstract void contentAnalysis(BufferedReader br);
 	
 	public void analyse() {
-		//System.out.println("Analysing file " + this.file.getName());
-		
 		try {
 			InputStream fis = new FileInputStream(this.file);
 		    InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));

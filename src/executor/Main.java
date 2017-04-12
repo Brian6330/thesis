@@ -5,15 +5,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import analyzer.ManifestAnalyzer;
-import analyzer.MetaInfoAnalyzer;
-import analyzer.SmaliAnalyzer;
+import executor.analyzers.ManifestAnalyzer;
+import executor.analyzers.MetaInfoAnalyzer;
+import executor.analyzers.SmaliAnalyzer;
+import executor.collectors.ResultCollector;
+import executor.io.FileStore;
 
 public class Main {
 
 	private String srcFilePath = "";
 	private String dstFolder = "";
-	private ResultCollector rc = new ResultCollector();
+	private ResultCollector rc;
 	
 	public static void main(String[] args) {
 		if (args.length != 1) {
@@ -26,6 +28,7 @@ public class Main {
 				
 		start.unpackFile();
 		start.analyseFile();
+		start.storeResults();
 		//start.cleanupFile();
 	}
 	
@@ -57,6 +60,9 @@ public class Main {
 	}
 	
 	private void analyseFile() {
+		cleanupOriginalFileCopies();
+		this.rc = new ResultCollector(new File(this.srcFilePath));
+		
 		ArrayList<File> files = scanDirectory(new File(this.dstFolder));
 
 		for (File file : files) {
@@ -73,9 +79,22 @@ public class Main {
 		}
 	}
 
+	private void storeResults() {
+		FileStore fs = new FileStore(this.rc);
+		fs.storeToDisk();
+	}
+
 	private void cleanupFile() {
 		try {
 			deleteRecursive(new File(this.dstFolder));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void cleanupOriginalFileCopies() {
+		try {
+			deleteRecursive(new File(this.dstFolder + "/original"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

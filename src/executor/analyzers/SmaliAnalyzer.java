@@ -1,4 +1,4 @@
-package analyzer;
+package executor.analyzers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import executor.ResultCollector;
+import executor.collectors.ResultCollector;
 
 public class SmaliAnalyzer extends BaseAnalyzer {
 
@@ -17,24 +17,23 @@ public class SmaliAnalyzer extends BaseAnalyzer {
 	@Override
 	protected void contentAnalysis(BufferedReader br) {
 		String line = "";
-		Pattern pattern = Pattern.compile("Landroid/telephony/TelephonyManager;->getDeviceId" + this.escapeChar + "(" + this.escapeChar + ")Ljava/lang/String;");
+		Pattern pattern_VULN_007 = Pattern.compile("Landroid/telephony/TelephonyManager;->getDeviceId" + this.escapeChar + "(" + this.escapeChar + ")Ljava/lang/String;");
 	    
+		long lineNr = 0;
 	    try {
 	    	
 			while ((line = br.readLine()) != null) {
-			    Matcher matcher = pattern.matcher(line);
+				lineNr++;
+			    Matcher matcher = pattern_VULN_007.matcher(line);
 
 			    while(matcher.find()){
-			    	this.rc.foundIssueGetDeviceId();
-			    	System.out.println("VULN-DEVICE_ID");
-			        System.out.println(matcher.start()+matcher.group() + " | " + line);
+			    	this.rc.found_Issue_GetDeviceId(this.file, lineNr);
+			        //System.out.println(matcher.start()+matcher.group() + " | " + line);
 			    }
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
-	
 }

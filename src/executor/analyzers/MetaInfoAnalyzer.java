@@ -1,9 +1,9 @@
-package analyzer;
+package executor.analyzers;
 
 import java.io.BufferedReader;
 import java.io.File;
 
-import executor.ResultCollector;
+import executor.collectors.ResultCollector;
 
 public class MetaInfoAnalyzer extends BaseAnalyzer {
 
