@@ -9,6 +9,7 @@ public class ResultCollector {
 	private long issue_GetDeviceId = 0;
 	private long issue_DbgRelease = 0;
 	private long issue_SchemeChan = 0;
+	private long issue_InterAppCom = 0;
 	
 	public ResultCollector(File f) {
 		this.apkUnderAnalysis = f;
@@ -43,5 +44,14 @@ public class ResultCollector {
 	
 	public String get_Issue_SchemeChan() {
 		return "VULN_003_SchemeChan = " + this.issue_SchemeChan;
+	}
+	
+	public void found_Issue_InterAppCom(File file, long lineNr) {
+		System.out.println("VULN_004_InterAppCom\t->\t" + file.getName() + ":" + lineNr);
+		this.issue_InterAppCom++;
+	}
+	
+	public String get_Issue_InterAppCom() {
+		return "VULN_004_InterAppCom = " + this.issue_InterAppCom;
 	}
 }

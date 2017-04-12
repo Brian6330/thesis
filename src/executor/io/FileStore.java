@@ -21,13 +21,13 @@ public class FileStore {
 
 		try {
 			out = new PrintWriter(fileNameStripped + ".log");
-			out.println(this.rc.get_Issue_DbgRelease());
+			out.println(this.rc.get_Issue_DbgRelease());	// VULN_001
 			// VULN_002_UnnecPerm generated externally
-			out.println(this.rc.get_Issue_SchemeChan());
-			// VULN_004
+			out.println(this.rc.get_Issue_SchemeChan());	// VULN_003
+			out.println(this.rc.get_Issue_InterAppCom());	// VULN_004
 			// VULN_005
 			// VULN_006
-			out.println(this.rc.get_Issue_GetDeviceId());
+			out.println(this.rc.get_Issue_GetDeviceId());	// VULN_007
 			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
