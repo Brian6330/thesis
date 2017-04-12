@@ -67,8 +67,8 @@ public class Main {
 
 		for (File file : files) {
 	    	if (file.getName().endsWith("smali")) {
-		    	SmaliAnalyzer sa = new SmaliAnalyzer(file, rc);
-	    		sa.analyse();
+//		    	SmaliAnalyzer sa = new SmaliAnalyzer(file, rc);
+//	    		sa.analyse();
 	    	} else if (file.getName().equals("AndroidManifest.xml")) {
 		    	ManifestAnalyzer ma = new ManifestAnalyzer(file, rc);
 	    		ma.analyse();

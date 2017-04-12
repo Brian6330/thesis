@@ -27,21 +27,12 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 	@Override
 	protected void contentAnalysis(BufferedReader br) {
 		StringBuilder xmlContent = new StringBuilder();
-		//Pattern pattern_VULN_001 = Pattern.compile("android:debuggable = true" + this.escapeChar + "(" + this.escapeChar + ")Ljava/lang/String;");
 		
 		String line = "";	    
-//		long lineNr = 0;
 	    try {
 	    	
 			while ((line = br.readLine()) != null) {
 				xmlContent.append(line);
-//				lineNr++;
-			    //Matcher matcher = pattern.matcher(line);
-
-//			    while(matcher.find()){
-//			    	this.rc.found_Issue_GetDeviceId(this.file, lineNr);
-//			        //System.out.println(matcher.start()+matcher.group() + " | " + line);
-//			    }
 			}
 			
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -53,9 +44,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 			Element root = doc.getDocumentElement();
 			
 			checkFor_VULN_001(root);
-						
-			
-			
+			checkFor_VULN_003(root);
 			
 	    } catch (IOException e) {
 			e.printStackTrace();
@@ -69,8 +58,6 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 	
 	
 	private void checkFor_VULN_001(Element root) {
-		
-		//NamedNodeMap baseElmnt_gold_attr = baseElmnt_gold.getAttributes();
 		NodeList appNodes = root.getElementsByTagName("application");
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
@@ -81,6 +68,20 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_DbgRelease(this.file, -1);
 					}
+				}
+			}
+		}
+	}
+	
+	private void checkFor_VULN_003(Element root) {
+		NodeList appNodes = root.getElementsByTagName("data");
+		for (int i = 0; i < appNodes.getLength(); i++) {
+			Node n = appNodes.item(i);
+			NamedNodeMap nnl = n.getAttributes();
+			for (int j = 0; j < nnl.getLength(); j++) {
+				Node n2 = nnl.item(j);
+				if (n2.getNodeName().toLowerCase().equals("android:scheme")) {
+					this.rc.found_Issue_SchemeChan(this.file, -1);
 				}
 			}
 		}
