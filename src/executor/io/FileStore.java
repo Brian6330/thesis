@@ -20,7 +20,7 @@ public class FileStore {
 		PrintWriter out;
 
 		try {
-			out = new PrintWriter(fileNameStripped + ".log");
+			out = new PrintWriter("./results/" + fileNameStripped + ".log");
 			out.println(this.rc.get_Issue_DbgRelease());	// VULN_001
 			// VULN_002_UnnecPerm generated externally
 			out.println(this.rc.get_Issue_SchemeChan());	// VULN_003

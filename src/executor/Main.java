@@ -16,6 +16,7 @@ public class Main {
 	private String srcFilePath = "";
 	private String dstFolder = "";
 	private ResultCollector rc;
+	private boolean runningOnWindows = true;
 	
 	public static void main(String[] args) {
 		if (args.length != 1) {
@@ -25,7 +26,7 @@ public class Main {
 		
 		String srcFilePath = args[0];
 		Main start = new Main(srcFilePath);
-				
+		
 		start.unpackFile();
 		start.analyseFile();
 		start.storeResults();
@@ -36,6 +37,14 @@ public class Main {
 		this.srcFilePath = srcFilePath;
 		
 		String cwd = System.getProperty("user.dir");
+		
+		String OsType = System.getProperty("os.name");
+		if (OsType.contains("Linux")) {
+			this.runningOnWindows = false;
+			System.out.println("Main: Detected Linux OS.");
+		} else {
+			System.out.println("Main: Detected Windows OS.");
+		}
 		
 		if (srcFilePath.indexOf('\\') != -1) {
 			int pos = this.srcFilePath.lastIndexOf('\\');
@@ -49,8 +58,15 @@ public class Main {
 	}
 	
 	private void unpackFile() {
+		Process p = null;
+		
 		try {
-			Process p = Runtime.getRuntime().exec("java -jar apktool.jar d " + this.srcFilePath); // currently APKTool version 2.2.2 included
+			if (this.runningOnWindows) {
+				p = Runtime.getRuntime().exec("java -jar apktool.jar d " + this.srcFilePath); // currently APKTool version 2.2.2 included	
+			} else {
+				p = Runtime.getRuntime().exec("../../jdk1.8.0_101/bin/java -d64 -Xmx60g -jar apktool.jar d " + this.srcFilePath); // currently APKTool version 2.2.2 included			
+			}
+				
 			p.waitFor();
 		} catch (IOException e) {
 			e.printStackTrace();
