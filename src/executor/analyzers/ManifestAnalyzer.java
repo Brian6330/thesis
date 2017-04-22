@@ -95,7 +95,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 		
 		// TODO: One entry with parsing below is missed with FB apk...
 		
-		int count = 0;
+//		int count = 0;
 		appNodes = root.getElementsByTagName("provider");
 		//System.out.println("A -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
@@ -106,7 +106,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_InterAppCom(this.file, -1);
-						count++;
+//						count++;
 					}
 				}
 			}
@@ -122,7 +122,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_InterAppCom(this.file, -1);
-						count++;
+//						count++;
 					}
 				}
 			}
@@ -138,7 +138,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_InterAppCom(this.file, -1);
-						count++;
+//						count++;
 					}
 				}
 			}
@@ -154,7 +154,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_InterAppCom(this.file, -1);
-						count++;
+//						count++;
 					}
 				}
 			}
@@ -170,7 +170,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_InterAppCom(this.file, -1);
-						count++;
+//						count++;
 					}
 				}
 			}
