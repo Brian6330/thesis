@@ -43,8 +43,8 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 
 			Element root = doc.getDocumentElement();
 			
-			//checkFor_VULN_001(root);
-			//checkFor_VULN_003(root);
+			checkFor_VULN_001(root);
+			checkFor_VULN_003(root);
 			checkFor_VULN_004(root);
 			
 	    } catch (IOException e) {
@@ -97,7 +97,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 		
 		int count = 0;
 		appNodes = root.getElementsByTagName("provider");
-		System.out.println("C -> " + appNodes.getLength());
+		//System.out.println("A -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
@@ -113,6 +113,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 		}
 		
 		appNodes = root.getElementsByTagName("activity");
+		//System.out.println("B -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
@@ -128,6 +129,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 		}
 		
 		appNodes = root.getElementsByTagName("receiver");
+		//System.out.println("C -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
@@ -143,6 +145,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 		}
 		
 		appNodes = root.getElementsByTagName("service");
+		//System.out.println("D -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
@@ -158,6 +161,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 		}
 		
 		appNodes = root.getElementsByTagName("activity-alias");
+		//System.out.println("E -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
@@ -172,6 +176,6 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 			}
 		}
 		
-		System.out.println("B -> " + count);
+		//System.out.println("TOTAL -> " + count);
 	}
 }
