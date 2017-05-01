@@ -88,16 +88,7 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 	}
 	
 	private void checkFor_VULN_004(Element root) {
-		NodeList appNodes = root.getElementsByTagName("intent-filter");
-//		for (int i = 0; i < appNodes.getLength(); i++) {
-//			this.rc.found_Issue_InterAppCom(this.file, -1);
-//		}
-		
-		// TODO: One entry with parsing below is missed with FB apk...
-		
-//		int count = 0;
-		appNodes = root.getElementsByTagName("provider");
-		//System.out.println("A -> " + appNodes.getLength());
+		NodeList appNodes = root.getElementsByTagName("provider");
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
@@ -106,76 +97,113 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_InterAppCom(this.file, -1);
-//						count++;
 					}
 				}
 			}
 		}
 		
 		appNodes = root.getElementsByTagName("activity");
-		//System.out.println("B -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
-			for (int j = 0; j < nnl.getLength(); j++) {
-				Node n2 = nnl.item(j);
-				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-					if (n2.getNodeValue().toLowerCase().equals("true")) {
-						this.rc.found_Issue_InterAppCom(this.file, -1);
-//						count++;
+			NodeList childs = n.getChildNodes();
+			boolean parentNodeHasFilter = false;
+			for (int k = 0; k < childs.getLength(); k++) {
+				Node child = childs.item(k);
+				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
+					parentNodeHasFilter = true;
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
+				}
+			}
+			if (!parentNodeHasFilter) {
+				for (int j = 0; j < nnl.getLength(); j++) {
+					Node n2 = nnl.item(j);
+					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+						if (n2.getNodeValue().toLowerCase().equals("true")) {
+							this.rc.found_Issue_InterAppCom(this.file, -1);
+						}
 					}
 				}
 			}
 		}
 		
 		appNodes = root.getElementsByTagName("receiver");
-		//System.out.println("C -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
-			for (int j = 0; j < nnl.getLength(); j++) {
-				Node n2 = nnl.item(j);
-				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-					if (n2.getNodeValue().toLowerCase().equals("true")) {
-						this.rc.found_Issue_InterAppCom(this.file, -1);
-//						count++;
+			NodeList childs = n.getChildNodes();
+			boolean parentNodeHasFilter = false;
+			for (int k = 0; k < childs.getLength(); k++) {
+				Node child = childs.item(k);
+				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
+					parentNodeHasFilter = true;
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
+				}
+			}
+			if (!parentNodeHasFilter) {
+				for (int j = 0; j < nnl.getLength(); j++) {
+					Node n2 = nnl.item(j);
+					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+						if (n2.getNodeValue().toLowerCase().equals("true")) {
+							this.rc.found_Issue_InterAppCom(this.file, -1);
+						}
 					}
 				}
 			}
 		}
 		
 		appNodes = root.getElementsByTagName("service");
-		//System.out.println("D -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
-			for (int j = 0; j < nnl.getLength(); j++) {
-				Node n2 = nnl.item(j);
-				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-					if (n2.getNodeValue().toLowerCase().equals("true")) {
-						this.rc.found_Issue_InterAppCom(this.file, -1);
-//						count++;
+			NodeList childs = n.getChildNodes();
+			boolean parentNodeHasFilter = false;
+			for (int k = 0; k < childs.getLength(); k++) {
+				Node child = childs.item(k);
+				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
+					parentNodeHasFilter = true;
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
+				}
+			}
+			if (!parentNodeHasFilter) {
+				for (int j = 0; j < nnl.getLength(); j++) {
+					Node n2 = nnl.item(j);
+					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+						if (n2.getNodeValue().toLowerCase().equals("true")) {
+							this.rc.found_Issue_InterAppCom(this.file, -1);
+						}
 					}
 				}
 			}
 		}
 		
 		appNodes = root.getElementsByTagName("activity-alias");
-		//System.out.println("E -> " + appNodes.getLength());
 		for (int i = 0; i < appNodes.getLength(); i++) {
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
-			for (int j = 0; j < nnl.getLength(); j++) {
-				Node n2 = nnl.item(j);
-				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-					if (n2.getNodeValue().toLowerCase().equals("true")) {
-						this.rc.found_Issue_InterAppCom(this.file, -1);
-//						count++;
+			NodeList childs = n.getChildNodes();
+			boolean parentNodeHasFilter = false;
+			for (int k = 0; k < childs.getLength(); k++) {
+				Node child = childs.item(k);
+				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
+					parentNodeHasFilter = true;
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
+				}
+			}
+			if (!parentNodeHasFilter) {
+				for (int j = 0; j < nnl.getLength(); j++) {
+					Node n2 = nnl.item(j);
+					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+						if (n2.getNodeValue().toLowerCase().equals("true")) {
+							this.rc.found_Issue_InterAppCom(this.file, -1);
+						}
 					}
 				}
 			}
 		}
-		
-		//System.out.println("TOTAL -> " + count);
 	}
 }

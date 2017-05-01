@@ -30,7 +30,7 @@ public class Main {
 		start.unpackFile();
 		start.analyseFile();
 		start.storeResults();
-		start.cleanupFile();
+//		start.cleanupFile();
 	}
 	
 	public Main(String srcFilePath) {
