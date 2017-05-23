@@ -4,17 +4,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import executor.analyzers.ManifestAnalyzer;
 import executor.analyzers.MetaInfoAnalyzer;
 import executor.analyzers.SmaliAnalyzer;
 import executor.collectors.ResultCollector;
+import executor.io.ApiMappingsReader;
 import executor.io.FileStore;
 
 public class Main {
 
 	private String srcFilePath = "";
 	private String dstFolder = "";
+	private String permissionMappingsFile = "jellybean_publishedapimapping.csv";
 	private ResultCollector rc;
 	private boolean runningOnWindows = true;
 	
@@ -30,7 +34,7 @@ public class Main {
 		start.unpackFile();
 		start.analyseFile();
 		start.storeResults();
-//		start.cleanupFile();
+		start.cleanupFile();
 	}
 	
 	public Main(String srcFilePath) {
@@ -79,20 +83,35 @@ public class Main {
 		cleanupOriginalFileCopies();
 		this.rc = new ResultCollector(new File(this.srcFilePath));
 		
+		ManifestAnalyzer ma = null;
 		ArrayList<File> files = scanDirectory(new File(this.dstFolder));
-
 		for (File file : files) {
-	    	if (file.getName().endsWith("smali")) {
-		    	SmaliAnalyzer sa = new SmaliAnalyzer(file, rc);
-	    		sa.analyse();
-	    	} else if (file.getName().equals("AndroidManifest.xml")) {
-		    	ManifestAnalyzer ma = new ManifestAnalyzer(file, rc);
+			if (file.getName().equals("AndroidManifest.xml")) {
+		    	ma = new ManifestAnalyzer(file, rc);
 	    		ma.analyse();
+	    	}
+		}
+
+		// prepare mappings for string matching
+		ApiMappingsReader amr = new ApiMappingsReader(new File("src/executor/data/" + this.permissionMappingsFile));
+		amr.preparePermissionListFor(ma.getPermissionList());
+		HashMap<String, ArrayList<String>> additionalSearchStrings = amr.getPreparedCleanedList();
+		
+		for (File file : files) {
+	    	if (file.getName().endsWith("smali") && !(file.getParentFile().toString().contains("\\smali\\android\\support") || file.getParentFile().toString().contains("/smali/android/support"))) {
+		    	SmaliAnalyzer sa = new SmaliAnalyzer(file, rc, additionalSearchStrings);
+		    	additionalSearchStrings = sa.analyseAndReturnList();
 	    	} else if (file.getName().equals("apktool.yml")) {
-		    	MetaInfoAnalyzer mia = new MetaInfoAnalyzer(file, rc);
+		    	MetaInfoAnalyzer mia = new MetaInfoAnalyzer(file, this.rc);
 	    		mia.analyse();
 	    	}
 		}
+		
+	    if (!additionalSearchStrings.isEmpty()) {
+	    	for (Entry<String, ArrayList<String>> e : additionalSearchStrings.entrySet()) {
+				this.rc.found_Issue_UnnecPerm(new File(this.srcFilePath), -1, e.getKey());
+			}
+	    }
 	}
 
 	private void storeResults() {

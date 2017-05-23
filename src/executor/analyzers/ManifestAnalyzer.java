@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,6 +21,8 @@ import executor.collectors.ResultCollector;
 
 public class ManifestAnalyzer extends BaseAnalyzer {
 
+	ArrayList<String> permissionList = new ArrayList<String>();
+	
 	public ManifestAnalyzer(File file, ResultCollector rc) {
 		super(file, rc);
 	}
@@ -44,8 +47,10 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 			Element root = doc.getDocumentElement();
 			
 			checkFor_VULN_001(root);
+			checkFor_VULN_002_prep(root);
 			checkFor_VULN_003(root);
 			checkFor_VULN_004(root);
+			checkFor_VULN_023(root);
 			
 	    } catch (IOException e) {
 			e.printStackTrace();
@@ -67,6 +72,23 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				if (n2.getNodeName().toLowerCase().equals("android:debuggable")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
 						this.rc.found_Issue_DbgRelease(this.file, -1);
+					}
+				}
+			}
+		}
+	}
+	
+	// builds permission list for SmaliAnalyzer
+	private void checkFor_VULN_002_prep(Element root) {
+		NodeList appNodes = root.getElementsByTagName("uses-permission");
+		for (int i = 0; i < appNodes.getLength(); i++) {
+			Node n = appNodes.item(i);
+			NamedNodeMap nnl = n.getAttributes();
+			for (int j = 0; j < nnl.getLength(); j++) {
+				Node n2 = nnl.item(j);
+				if (n2.getNodeName().toLowerCase().equals("android:name")) {
+					if (!this.permissionList.contains(n2.getNodeValue().toLowerCase())) {
+						this.permissionList.add(n2.getNodeValue().toLowerCase());
 					}
 				}
 			}
@@ -205,5 +227,27 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				}
 			}
 		}
+	}
+	
+	private void checkFor_VULN_023(Element root) {
+		NodeList appNodes = root.getElementsByTagName("uses-permission");
+		for (int i = 0; i < appNodes.getLength(); i++) {
+			Node n = appNodes.item(i);
+			NamedNodeMap nnl = n.getAttributes();
+			for (int j = 0; j < nnl.getLength(); j++) {
+				Node n2 = nnl.item(j);
+				if (n2.getNodeName().toLowerCase().equals("android:name")) {
+					if (n2.getNodeValue().toLowerCase().equals("android.permission.delete_packages")) {
+						this.rc.found_Issue_UnackInst(this.file, -1);
+					} else if (n2.getNodeValue().toLowerCase().equals("android.permission.install_packages")) {
+						this.rc.found_Issue_UnackInst(this.file, -1);
+					}
+				}
+			}
+		}
+	}
+	
+	public ArrayList<String> getPermissionList() {
+		return this.permissionList;
 	}
 }

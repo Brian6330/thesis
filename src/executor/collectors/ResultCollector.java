@@ -7,12 +7,12 @@ public class ResultCollector {
 	private File apkUnderAnalysis;
 	
 	private long issue_DbgRelease = 0;
-//	private long issue_UnnecPerm = 0;
+	private long issue_UnnecPerm = 0;
 	private long issue_SchemeChan = 0;
 	private long issue_InterAppCom = 0;
 	private long issue_HeadAttach = 0;
 	private long issue_HardwareId = 0;
-//	private long issue_UntrustEE = 0;
+	private long issue_UntrustEE = 0;
 //	private long issue_ExposePers = 0;
 	private long issue_ExposeClip = 0;
 	private long issue_InsecNetP = 0;
@@ -23,12 +23,12 @@ public class ResultCollector {
 //	private long issue_MisuseCryp = 0;
 	private long issue_UnprotSock = 0;
 //	private long issue_AdbCapab = 0;
-//	private long issue_NativeCode = 0;
+	private long issue_NativeCode = 0;
 //	private long issue_DynCodeExt = 0;
-//	private long issue_DynCodeIns = 0;
+	private long issue_DynCodeIns = 0;
 	private long issue_CodeInject = 0;
 	private long issue_WebViewSB = 0;
-//	private long issue_UnackInst = 0;
+	private long issue_UnackInst = 0;
 //	private long issue_Piggyback = 0;
 	
 	public ResultCollector(File f) {
@@ -46,6 +46,20 @@ public class ResultCollector {
 	
 	public String get_Issue_DbgRelease() {
 		return "VULN_001_DbgRelease = " + this.issue_DbgRelease;
+	}
+	
+	public void found_Issue_UnnecPerm(File file, long lineNr) {
+		System.out.println("VULN_002_UnnecPerm\t->\t" + file.getName() + ":" + lineNr);
+		this.issue_UnnecPerm++;
+	}
+	
+	public void found_Issue_UnnecPerm(File file, long lineNr, String unnecessaryPermission) {
+		System.out.println("VULN_002_UnnecPerm\t->\t" + file.getName() + ":" + lineNr + ", " + unnecessaryPermission);
+		this.issue_UnnecPerm++;
+	}
+	
+	public String get_Issue_UnnecPerm() {
+		return "VULN_002_UnnecPerm = " + this.issue_UnnecPerm;
 	}
 	
 	public void found_Issue_SchemeChan(File file, long lineNr) {
@@ -82,6 +96,15 @@ public class ResultCollector {
 	
 	public String get_Issue_HardwareId() {
 		return "VULN_006_HardwareId = " + this.issue_HardwareId;
+	}
+	
+	public void found_Issue_UntrustEE(File file, long lineNr) {
+		System.out.println("VULN_007_UntrustEE\t->\t" + file.getName() + ":" + lineNr);
+		this.issue_UntrustEE++;
+	}
+	
+	public String get_Issue_UntrustEE() {
+		return "VULN_007_UntrustEE = " + this.issue_UntrustEE;
 	}
 	
 	public void found_Issue_ExposeClip(File file, long lineNr) {
@@ -129,6 +152,24 @@ public class ResultCollector {
 		return "VULN_016_UnprotSock = " + this.issue_UnprotSock;
 	}
 	
+	public void found_Issue_NativeCode(File file, long lineNr) {
+		System.out.println("VULN_018_NativeCode\t->\t" + file.getName() + ":" + lineNr);
+		this.issue_NativeCode++;
+	}
+	
+	public String get_Issue_NativeCode() {
+		return "VULN_018_NativeCode = " + this.issue_NativeCode;
+	}
+	
+	public void found_Issue_DynCodeIns(File file, long lineNr) {
+		System.out.println("VULN_020_DynCodeIns\t->\t" + file.getName() + ":" + lineNr);
+		this.issue_DynCodeIns++;
+	}
+	
+	public String get_Issue_DynCodeIns() {
+		return "VULN_020_DynCodeIns = " + this.issue_DynCodeIns;
+	}
+	
 	public void found_Issue_CodeInject(File file, long lineNr) {
 		System.out.println("VULN_021_CodeInject\t->\t" + file.getName() + ":" + lineNr);
 		this.issue_CodeInject++;
@@ -145,5 +186,14 @@ public class ResultCollector {
 	
 	public String get_Issue_WebViewSB() {
 		return "VULN_022_WebViewSB = " + this.issue_WebViewSB;
+	}
+	
+	public void found_Issue_UnackInst(File file, long lineNr) {
+		System.out.println("VULN_023_UnackInst\t->\t" + file.getName() + ":" + lineNr);
+		this.issue_UnackInst++;
+	}
+	
+	public String get_Issue_UnackInst() {
+		return "VULN_023_UnackInst = " + this.issue_UnackInst;
 	}
 }
