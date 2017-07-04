@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import executor.analyzers.ManifestAnalyzer;
 import executor.analyzers.MetaInfoAnalyzer;
@@ -61,14 +64,37 @@ public class Main {
 		}
 	}
 	
+	private void extractApkStats(ResultCollector rc) {
+		File f = new File(this.srcFilePath);
+		long apkSize = f.getAbsoluteFile().length();
+		long dexSize = 0;
+		long dexDate = 0;
+		
+		try {
+			ZipFile zf = new ZipFile(f);
+			ZipEntry ze = zf.getEntry("classes.dex");
+			dexSize = ze.getSize();
+			dexDate = ze.getLastModifiedTime().toMillis();
+			zf.close();
+		} catch (ZipException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		rc.found_ApkSize(apkSize);
+		rc.found_DexSize(dexSize);
+		rc.found_DexDate(dexDate);
+	}
+	
 	private void unpackFile() {
 		Process p = null;
 		
 		try {
 			if (this.runningOnWindows) {
-				p = Runtime.getRuntime().exec("java -jar apktool.jar d " + this.srcFilePath); // currently APKTool version 2.2.2 included	
+				p = Runtime.getRuntime().exec("java -jar apktool.jar d " + this.srcFilePath); // currently APKTool version 2.2.3 included	
 			} else {
-				p = Runtime.getRuntime().exec("../../jdk1.8.0_101/bin/java -d64 -Xmx60g -jar apktool.jar d " + this.srcFilePath); // currently APKTool version 2.2.2 included			
+				p = Runtime.getRuntime().exec("../../jdk1.8.0_101/bin/java -d64 -Xmx60g -jar apktool.jar d " + this.srcFilePath); // currently APKTool version 2.2.3 included			
 			}
 				
 			p.waitFor();
@@ -80,8 +106,11 @@ public class Main {
 	}
 	
 	private void analyseFile() {
-		cleanupOriginalFileCopies();
 		this.rc = new ResultCollector(new File(this.srcFilePath));
+		
+		extractApkStats(this.rc);
+		
+		cleanupOriginalFileCopies();
 		
 		ManifestAnalyzer ma = null;
 		ArrayList<File> files = scanDirectory(new File(this.dstFolder));
@@ -93,7 +122,7 @@ public class Main {
 		}
 
 		// prepare mappings for string matching
-		ApiMappingsReader amr = new ApiMappingsReader(new File("src/executor/data/" + this.permissionMappingsFile));
+		ApiMappingsReader amr = new ApiMappingsReader(new File(this.permissionMappingsFile));
 		amr.preparePermissionListFor(ma.getPermissionList());
 		HashMap<String, ArrayList<String>> additionalSearchStrings = amr.getPreparedCleanedList();
 		

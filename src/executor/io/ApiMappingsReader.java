@@ -99,7 +99,7 @@ public class ApiMappingsReader {
 		
 		while (type.contains("[]")) {
 			type = type.replace("[]", "");
-			type = "[" + type;
+			type = "\\[" + type;
 		}
 		
 		if (type.contains(".")) {

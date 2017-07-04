@@ -31,6 +31,10 @@ public class ResultCollector {
 	private long issue_UnackInst = 0;
 //	private long issue_Piggyback = 0;
 	
+	private long apkSize = 0;
+	private long dexSize = 0;
+	private long dexDate = 0;
+	
 	public ResultCollector(File f) {
 		this.apkUnderAnalysis = f;
 	}
@@ -195,5 +199,32 @@ public class ResultCollector {
 	
 	public String get_Issue_UnackInst() {
 		return "VULN_023_UnackInst = " + this.issue_UnackInst;
+	}
+	
+	public void found_DexDate(long dexDate) {
+		System.out.println("Found DexDate\t\t->\t" + dexDate);
+		this.dexDate = dexDate;
+	}
+	
+	public String get_DexDate() {
+		return "DexDate = " + this.dexDate;
+	}
+	
+	public void found_DexSize(long dexSize) {
+		System.out.println("Found DexSize\t\t->\t" + dexSize);
+		this.dexSize = dexSize;
+	}
+	
+	public String get_DexSize() {
+		return "DexSize = " + this.dexSize;
+	}
+	
+	public void found_ApkSize(long apkSize) {
+		System.out.println("Found ApkSize\t\t->\t" + apkSize);
+		this.apkSize = apkSize;
+	}
+	
+	public String get_ApkSize() {
+		return "ApkSize = " + this.apkSize;
 	}
 }

@@ -112,14 +112,27 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 	private void checkFor_VULN_004(Element root) {
 		NodeList appNodes = root.getElementsByTagName("provider");
 		for (int i = 0; i < appNodes.getLength(); i++) {
+			boolean flagIsExported = false;
+			boolean flagIsProtected = false;
 			Node n = appNodes.item(i);
 			NamedNodeMap nnl = n.getAttributes();
 			for (int j = 0; j < nnl.getLength(); j++) {
 				Node n2 = nnl.item(j);
 				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
 					if (n2.getNodeValue().toLowerCase().equals("true")) {
-						this.rc.found_Issue_InterAppCom(this.file, -1);
+						flagIsExported = true;
 					}
+				}
+				
+				if (n2.getNodeName().toLowerCase().equals("android:permission")) {
+					if (!n2.getNodeValue().equals("")) {
+						flagIsProtected = true;
+					}
+				}
+				
+				if (flagIsExported && !flagIsProtected) {
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
 				}
 			}
 		}
@@ -134,18 +147,29 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				Node child = childs.item(k);
 				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
 					parentNodeHasFilter = true;
-					this.rc.found_Issue_InterAppCom(this.file, -1);
 					break;
 				}
 			}
-			if (!parentNodeHasFilter) {
-				for (int j = 0; j < nnl.getLength(); j++) {
-					Node n2 = nnl.item(j);
-					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-						if (n2.getNodeValue().toLowerCase().equals("true")) {
-							this.rc.found_Issue_InterAppCom(this.file, -1);
-						}
+			
+			for (int j = 0; j < nnl.getLength(); j++) {
+				Node n2 = nnl.item(j);
+				boolean flagIsExported = false;
+				boolean flagIsProtected = false;
+				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+					if (n2.getNodeValue().toLowerCase().equals("true")) {
+						flagIsExported = true;
 					}
+				}
+				
+				if (n2.getNodeName().toLowerCase().equals("android:permission")) {
+					if (!n2.getNodeValue().equals("")) {
+						flagIsProtected = true;
+					}
+				}
+				
+				if ((flagIsExported && !flagIsProtected) || (parentNodeHasFilter && !flagIsProtected)) {
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
 				}
 			}
 		}
@@ -160,18 +184,29 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				Node child = childs.item(k);
 				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
 					parentNodeHasFilter = true;
-					this.rc.found_Issue_InterAppCom(this.file, -1);
 					break;
 				}
 			}
-			if (!parentNodeHasFilter) {
-				for (int j = 0; j < nnl.getLength(); j++) {
-					Node n2 = nnl.item(j);
-					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-						if (n2.getNodeValue().toLowerCase().equals("true")) {
-							this.rc.found_Issue_InterAppCom(this.file, -1);
-						}
+			
+			for (int j = 0; j < nnl.getLength(); j++) {
+				Node n2 = nnl.item(j);
+				boolean flagIsExported = false;
+				boolean flagIsProtected = false;
+				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+					if (n2.getNodeValue().toLowerCase().equals("true")) {
+						flagIsExported = true;
 					}
+				}
+				
+				if (n2.getNodeName().toLowerCase().equals("android:permission")) {
+					if (!n2.getNodeValue().equals("")) {
+						flagIsProtected = true;
+					}
+				}
+				
+				if ((flagIsExported && !flagIsProtected) || (parentNodeHasFilter && !flagIsProtected)) {
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
 				}
 			}
 		}
@@ -186,18 +221,29 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				Node child = childs.item(k);
 				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
 					parentNodeHasFilter = true;
-					this.rc.found_Issue_InterAppCom(this.file, -1);
 					break;
 				}
 			}
-			if (!parentNodeHasFilter) {
-				for (int j = 0; j < nnl.getLength(); j++) {
-					Node n2 = nnl.item(j);
-					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-						if (n2.getNodeValue().toLowerCase().equals("true")) {
-							this.rc.found_Issue_InterAppCom(this.file, -1);
-						}
+			
+			for (int j = 0; j < nnl.getLength(); j++) {
+				Node n2 = nnl.item(j);
+				boolean flagIsExported = false;
+				boolean flagIsProtected = false;
+				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+					if (n2.getNodeValue().toLowerCase().equals("true")) {
+						flagIsExported = true;
 					}
+				}
+				
+				if (n2.getNodeName().toLowerCase().equals("android:permission")) {
+					if (!n2.getNodeValue().equals("")) {
+						flagIsProtected = true;
+					}
+				}
+				
+				if ((flagIsExported && !flagIsProtected) || (parentNodeHasFilter && !flagIsProtected)) {
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
 				}
 			}
 		}
@@ -212,18 +258,29 @@ public class ManifestAnalyzer extends BaseAnalyzer {
 				Node child = childs.item(k);
 				if (child.getNodeName().toLowerCase().equals("intent-filter")) {
 					parentNodeHasFilter = true;
-					this.rc.found_Issue_InterAppCom(this.file, -1);
 					break;
 				}
 			}
-			if (!parentNodeHasFilter) {
-				for (int j = 0; j < nnl.getLength(); j++) {
-					Node n2 = nnl.item(j);
-					if (n2.getNodeName().toLowerCase().equals("android:exported")) {
-						if (n2.getNodeValue().toLowerCase().equals("true")) {
-							this.rc.found_Issue_InterAppCom(this.file, -1);
-						}
+			
+			for (int j = 0; j < nnl.getLength(); j++) {
+				Node n2 = nnl.item(j);
+				boolean flagIsExported = false;
+				boolean flagIsProtected = false;
+				if (n2.getNodeName().toLowerCase().equals("android:exported")) {
+					if (n2.getNodeValue().toLowerCase().equals("true")) {
+						flagIsExported = true;
 					}
+				}
+				
+				if (n2.getNodeName().toLowerCase().equals("android:permission")) {
+					if (!n2.getNodeValue().equals("")) {
+						flagIsProtected = true;
+					}
+				}
+				
+				if ((flagIsExported && !flagIsProtected) || (parentNodeHasFilter && !flagIsProtected)) {
+					this.rc.found_Issue_InterAppCom(this.file, -1);
+					break;
 				}
 			}
 		}

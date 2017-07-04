@@ -45,6 +45,9 @@ public class FileStore {
 			out.println(this.rc.get_Issue_WebViewSB());		// VULN_022
 			out.println(this.rc.get_Issue_UnackInst());		// VULN_023
 			// VULN_024_Piggyback
+			out.println(this.rc.get_ApkSize());		// apk_size
+			out.println(this.rc.get_DexSize());		// dex_size
+			out.println(this.rc.get_DexDate());		// dex_date (last modified)
 			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
