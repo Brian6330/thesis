@@ -19,22 +19,22 @@ import java.util.zip.ZipFile;
 import exporter.data.AnalysisResult;
 import exporter.io.DatabaseHandler;
 
-public class Main_Ubelix_25k_UPDATE {
+public class Main_Ubelix_100k_UPDATE_COMPLETE {
 
-	private String dataFilePath = "results_25k_COMPLETE.zip";
+	private String dataFilePath = "results_100k_COMPLETE.zip";
 	private String dbName = "database.sqlite";
 	private File dataFile;
 	private DatabaseHandler dbh;
 	
 	
 	public static void main(String[] args) {
-		Main_Ubelix_25k_UPDATE start = new Main_Ubelix_25k_UPDATE();
+		Main_Ubelix_100k_UPDATE_COMPLETE start = new Main_Ubelix_100k_UPDATE_COMPLETE();
 		
 		ArrayList<AnalysisResult> ars = start.readZipFile();
 		start.storeAnalysisResults(ars);
 	}
 
-	public Main_Ubelix_25k_UPDATE() {
+	public Main_Ubelix_100k_UPDATE_COMPLETE() {
 		this.dataFile = new File(this.dataFilePath);
 		this.dbh = new DatabaseHandler(this.dbName, false);
 	}
@@ -50,7 +50,7 @@ public class Main_Ubelix_25k_UPDATE {
 			    String name = ze.getName();
 			    if (name.endsWith(".log")) {
 			    	AnalysisResult ar = new AnalysisResult();
-			    	ar.md5 = name.substring(name.length() - 4 - 32, name.length() - 4);
+			    	ar.sha256 = name.substring(0, name.length() - 4);
 			    	InputStream in = zf.getInputStream(ze);
 				    InputStreamReader isr = new InputStreamReader(in, Charset.forName("UTF-8"));
 				    BufferedReader br = new BufferedReader(isr);
@@ -153,7 +153,7 @@ public class Main_Ubelix_25k_UPDATE {
 	private void storeAnalysisResults(ArrayList<AnalysisResult> arl) {
 		long arCount = 0;
 		for (AnalysisResult ar : arl) {
-			dbh.updateVirusShareEntryComplete(ar);
+			dbh.updateEntry(ar);
 			arCount++;
 			if (arCount % 1000 == 0) {
 				System.out.println("Main: Updated row " + arCount);

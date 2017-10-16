@@ -302,6 +302,46 @@ public class DatabaseHandler {
 	}
 	
 	
+	public void updateVirusShareEntryComplete(AnalysisResult ar) {
+		try {
+			String sql = "UPDATE result_data " + 
+				"SET vuln_001_DbgRelease = " + ar.vuln_001 + ", " +
+				"vuln_002_UnnecPerm = " + ar.vuln_002 + ", " +
+				"vuln_003_SchemeChan = " + ar.vuln_003 + ", " +
+				"vuln_004_InterAppCom = " + ar.vuln_004 + ", " +
+				"vuln_005_HeadAttach = " + ar.vuln_005 + ", " +
+				"vuln_006_HardwareId = " + ar.vuln_006 + ", " +
+				"vuln_007_UntrustEE = " + ar.vuln_007 + ", " +
+//				"vuln_008_ExposePers = " + ar.vuln_008 + ", " +
+				"vuln_009_ExposeClip = " + ar.vuln_009 + ", " +
+				"vuln_010_InsecNetP = " + ar.vuln_010 + ", " +
+				"vuln_011_HttpsMisc = " + ar.vuln_011 + ", " +
+				"vuln_012_ForgedCer = " + ar.vuln_012 + ", " +
+//				"vuln_013_OutdateLib = " + ar.vuln_013 + ", " +
+//				"vuln_014_UntrustAPI = " + ar.vuln_014 + ", " +
+//				"vuln_015_MisuseCryp = " + ar.vuln_015 + ", " +
+				"vuln_016_UnprotSock = " + ar.vuln_016 + ", " +
+//				"vuln_017_AdbCapab = " + ar.vuln_017 + ", " +
+				"vuln_018_NativeCode = " + ar.vuln_018 + ", " +
+//				"vuln_019_DynCodeExt = " + ar.vuln_019 + ", " +
+				"vuln_020_DynCodeIns = " + ar.vuln_020 + ", " +
+				"vuln_021_CodeInject = " + ar.vuln_021 + ", " +
+				"vuln_022_WebViewSB = " + ar.vuln_022 + ", " +
+				"vuln_023_UnackInst = " + ar.vuln_023 + ", " +
+//				"vuln_024_Piggyback = " + ar.vuln_024 + " " +
+				"apk_size = " + ar.apk_size + ", " +
+				"dex_size = " + ar.dex_size + ", " +
+				"dex_date = '" + ar.dex_date + "' " +
+				"WHERE " +
+				"md5 = '" + ar.md5 + "';";
+			Statement stmt;
+			stmt = this.conn.createStatement();
+			stmt.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * ==================================================================
 	 *	IMPORTANT: needs previous manual column insertion into table !

@@ -38,7 +38,7 @@ public class SmaliAnalyzer extends BaseAnalyzer {
 		Pattern pattern_VULN_007b = Pattern.compile("Ljava/security/KeyPairGenerator;->generateKeyPair" + this.escapeChar + "(" + this.escapeChar + ")Ljava/security/KeyPair");
 		Pattern pattern_VULN_007c = Pattern.compile("Ljava/security/KeyPairGenerator;->genKeyPair" + this.escapeChar + "(" + this.escapeChar + ")Ljava/security/KeyPair");
 		Pattern pattern_VULN_009a = Pattern.compile("Landroid/content/ClipboardManager;->getPrimaryClip" + this.escapeChar + "(" + this.escapeChar + ")Landroid/content/ClipData");
-		Pattern pattern_VULN_009b = Pattern.compile("Landroid/content/ClipboardManager;->setPrimaryClip" + this.escapeChar + "(Landroid.content.ClipData;" + this.escapeChar + ")V");
+		Pattern pattern_VULN_009b = Pattern.compile("Landroid/content/ClipboardManager;->setPrimaryClip" + this.escapeChar + "(Landroid/content/ClipData;" + this.escapeChar + ")V");
 		Pattern pattern_VULN_010 = Pattern.compile("Ljava/net/HttpURLConnection;-><init>" + this.escapeChar + "(Ljava/net/URL;" + this.escapeChar + ")V");
 		Pattern pattern_VULN_011 = Pattern.compile(".implements Ljavax/net/ssl/X509TrustManager;");
 		Pattern pattern_VULN_012a = Pattern.compile("new-array v\\d+, v\\d+, " + this.escapeChar + "[Ljava/security/cert/X509Certificate;");

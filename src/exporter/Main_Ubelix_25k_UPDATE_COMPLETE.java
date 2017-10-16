@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,22 +17,22 @@ import java.util.zip.ZipFile;
 import exporter.data.AnalysisResult;
 import exporter.io.DatabaseHandler;
 
-public class Main_Ubelix_25k_UPDATE {
+public class Main_Ubelix_25k_UPDATE_COMPLETE {
 
-	private String dataFilePath = "results_25k_COMPLETE.zip";
+	private String dataFilePath = "results_25k.zip";
 	private String dbName = "database.sqlite";
 	private File dataFile;
 	private DatabaseHandler dbh;
 	
 	
 	public static void main(String[] args) {
-		Main_Ubelix_25k_UPDATE start = new Main_Ubelix_25k_UPDATE();
+		Main_Ubelix_25k_UPDATE_COMPLETE start = new Main_Ubelix_25k_UPDATE_COMPLETE();
 		
 		ArrayList<AnalysisResult> ars = start.readZipFile();
 		start.storeAnalysisResults(ars);
 	}
 
-	public Main_Ubelix_25k_UPDATE() {
+	public Main_Ubelix_25k_UPDATE_COMPLETE() {
 		this.dataFile = new File(this.dataFilePath);
 		this.dbh = new DatabaseHandler(this.dbName, false);
 	}
@@ -115,17 +113,6 @@ public class Main_Ubelix_25k_UPDATE {
 							case 17:
 								ar.vuln_023 = Integer.valueOf(m01.group(1)).intValue();
 								break;
-							case 18:
-								ar.apk_size = Integer.valueOf(m01.group(1)).intValue();
-								break;
-							case 19:
-								ar.dex_size = Integer.valueOf(m01.group(1)).intValue();
-								break;
-							case 20:
-								SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");    
-								Date resultdate = new Date(Long.valueOf(m01.group(1)).longValue());
-								ar.dex_date = sdf.format(resultdate);
-								break;
 							}
 					    }
 						
@@ -153,7 +140,7 @@ public class Main_Ubelix_25k_UPDATE {
 	private void storeAnalysisResults(ArrayList<AnalysisResult> arl) {
 		long arCount = 0;
 		for (AnalysisResult ar : arl) {
-			dbh.updateVirusShareEntryComplete(ar);
+			dbh.updateVirusShareEntry(ar);
 			arCount++;
 			if (arCount % 1000 == 0) {
 				System.out.println("Main: Updated row " + arCount);

@@ -34,10 +34,13 @@ public class Main {
 		String srcFilePath = args[0];
 		Main start = new Main(srcFilePath);
 		
+		long startTime = System.currentTimeMillis();
 		start.unpackFile();
 		start.analyseFile();
 		start.storeResults();
 		start.cleanupFile();
+		long endTime = System.currentTimeMillis();
+		System.out.println("Analysis took " + (endTime - startTime)/1000 + " seconds.");
 	}
 	
 	public Main(String srcFilePath) {
