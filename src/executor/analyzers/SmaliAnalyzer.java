@@ -51,6 +51,12 @@ public class SmaliAnalyzer extends BaseAnalyzer {
 		Pattern pattern_VULN_021 = Pattern.compile("Landroid/webkit/WebSettings;->setJavaScriptEnabled" + this.escapeChar + "(Z" + this.escapeChar + ")V");
 		Pattern pattern_VULN_022 = Pattern.compile("Landroid/webkit/WebView;->addJavascriptInterface" + this.escapeChar + "(Ljava/lang/Object;Ljava/lang/String;" + this.escapeChar + ")V");
 		
+		Pattern pattern_VULN_099a = Pattern.compile("[hH][tT][tT][pP][sS]?://");
+		Pattern pattern_VULN_099b = Pattern.compile("[0-9][0-9]?[0-9]?" + this.escapeChar + ".[0-9][0-9]?[0-9]?" + this.escapeChar + ".[0-9][0-9]?[0-9]?" + this.escapeChar + ".[0-9][0-9]?[0-9]?");
+		Pattern pattern_VULN_099c = Pattern.compile("[A-Za-z0-9_-]+" + this.escapeChar + ".[a-zA-Z][a-zA-Z][mgtuvlfbpMGTUVLFBP]?[oiaOIA]?\"");
+		Pattern pattern_VULN_099d = Pattern.compile(this.escapeChar + ".source "); // removes many false positives like ".source ...."
+		
+		
 		long lineNr = 0;
 	    try {
 			while ((line = br.readLine()) != null) {
@@ -76,6 +82,11 @@ public class SmaliAnalyzer extends BaseAnalyzer {
 			    Matcher matcher_020 = pattern_VULN_020.matcher(line);
 			    Matcher matcher_021 = pattern_VULN_021.matcher(line);
 			    Matcher matcher_022 = pattern_VULN_022.matcher(line);
+			    
+			    Matcher matcher_099a = pattern_VULN_099a.matcher(line);
+			    Matcher matcher_099b = pattern_VULN_099b.matcher(line);
+			    Matcher matcher_099c = pattern_VULN_099c.matcher(line);
+			    Matcher matcher_099d = pattern_VULN_099d.matcher(line);
 
 			    while(matcher_003.find()){
 			    	this.rc.found_Issue_SchemeChan(this.file, lineNr);
@@ -160,6 +171,23 @@ public class SmaliAnalyzer extends BaseAnalyzer {
 			    while(matcher_022.find()){
 			    	this.rc.found_Issue_WebViewSB(this.file, lineNr);
 			        //System.out.println(matcher.start()+matcher.group() + " | " + line);
+			    }
+			    
+			    if (!matcher_099d.find()) {
+			    	while(matcher_099a.find()){
+				    	this.rc.found_Issue_WebAPI(this.file, lineNr, line);
+				        //System.out.println(matcher.start()+matcher.group() + " | " + line);
+				    }
+				    
+				    while(matcher_099b.find()){
+				    	this.rc.found_Issue_WebAPI(this.file, lineNr, line);
+				        //System.out.println(matcher.start()+matcher.group() + " | " + line);
+				    }
+				    
+				    while(matcher_099c.find()){
+				    	this.rc.found_Issue_WebAPI(this.file, lineNr, line);
+				        //System.out.println(matcher.start()+matcher.group() + " | " + line);
+				    }
 			    }
 			    
 			    permissionEvaluation(line);

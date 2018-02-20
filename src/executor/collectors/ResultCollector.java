@@ -30,6 +30,7 @@ public class ResultCollector {
 	private long issue_WebViewSB = 0;
 	private long issue_UnackInst = 0;
 //	private long issue_Piggyback = 0;
+	private long issue_WebAPI = 0;
 	
 	private long apkSize = 0;
 	private long dexSize = 0;
@@ -226,5 +227,14 @@ public class ResultCollector {
 	
 	public String get_ApkSize() {
 		return "ApkSize = " + this.apkSize;
+	}
+	
+	public void found_Issue_WebAPI(File file, long lineNr, String line) {
+		System.out.println("VULN_099_WebAPI\t->\t" + file.getName() + ":" + lineNr + " -> " + line);
+		this.issue_WebAPI++;
+	}
+	
+	public String get_Issue_WebAPI() {
+		return "VULN_099_WebAPI = " + this.issue_WebAPI;
 	}
 }
