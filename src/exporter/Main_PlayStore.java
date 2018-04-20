@@ -1,13 +1,18 @@
 package exporter;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +26,9 @@ public class Main_PlayStore {
 	
 	private String pkgIdFile = "google_ids.csv";
 	private String dbName = "database.sqlite";
+	private String playStoreResultData = "playstore_results.csv";
 	private DatabaseHandler dbh;
+	private static boolean useDataBaseStorage = false;
 	
 	public static void main(String[] args) {
 		Main_PlayStore start = new Main_PlayStore();
@@ -30,9 +37,10 @@ public class Main_PlayStore {
 		int c = 0;
 		for (String s : al) {
 			AnalysisResult ar = start.scrapePlayStoreUrl(s);
-			start.storeResults(ar);
+			start.storeResults(ar, useDataBaseStorage);
 			c++;
 			System.out.println("Main_PlayStore: " + c + " " + s);
+//			System.exit(0);
 		}
 	}
 	
@@ -59,17 +67,18 @@ public class Main_PlayStore {
 	
 		    String line;
 		    Pattern p1 = Pattern.compile("Rated ([0-9.]+) stars out of five stars");
-		    Pattern p2 = Pattern.compile("/(\\w*)\"> <span itemprop=\"");
-		    Pattern p3 = Pattern.compile("itemprop=\"datePublished\">([\\w\\s,]+)<");
-		    Pattern p4 = Pattern.compile("itemprop=\"operatingSystems\">([\\w\\s,\\.-]+)<");
-		    Pattern p5 = Pattern.compile("itemprop=\"numDownloads\">([\\w\\s,\\.-]+)<");
-		    Pattern p6 = Pattern.compile("itemprop=\"softwareVersion\">([\\w\\s,\\.-]+)<");
-		    Pattern p7 = Pattern.compile("itemprop=\"contentRating\">([\\w\\s,\\.-]+)<");
-		    Pattern p8 = Pattern.compile("Offered By </div> <div class=\"content\">([^<]+)<");
+		    Pattern p2 = Pattern.compile("itemprop=\"genre\" href=\"https://play.google.com/store/apps/category/([A-Za-z_-]+)\"");
+		    Pattern p3 = Pattern.compile("span class=\"htlgb\">([\\w\\s,]+)<");
+		    Pattern p4 = Pattern.compile("Requires Android</div><span class=\"htlgb\"><div><span class=\"htlgb\">([\\w\\s,\\.,-]+)<");
+		    Pattern p5 = Pattern.compile("Installs</div><span class=\"htlgb\"><div><span class=\"htlgb\">([0-9.,-]+)+");
+		    Pattern p6 = Pattern.compile("Current Version</div><span class=\"htlgb\"><div><span class=\"htlgb\">([\\w\\s,\\.,-]+)<");
+		    Pattern p7 = Pattern.compile("Content Rating</div><span class=\"htlgb\"><div><span class=\"htlgb\"><div>([\\w\\s,\\.,-]+)<");
+		    Pattern p8 = Pattern.compile("Offered By</div><span class=\"htlgb\"><div><span class=\"htlgb\">([\\w\\s,\\.,-]+)<");
 		    Pattern p9 = Pattern.compile("mailto:([^\"]+)\"");
-		    Pattern p10 = Pattern.compile("\"id-app-title\" tabindex=\"0\">([^<]+)<");
+		    Pattern p10 = Pattern.compile("\"main-title\">([^<]+) - Apps on Google Play<");
 		    
-			while ((line = in.readLine()) != null) {
+		    
+		    while ((line = in.readLine()) != null) {
 				Matcher m1 = p1.matcher(line);
 				if (m1.find() && ar.starRating.equals("")) {
 					ar.starRating = m1.group(1);
@@ -168,7 +177,26 @@ public class Main_PlayStore {
 		return al;
 	}
 	
-	private void storeResults(AnalysisResult ar) {
-		this.dbh.updatePlayStoreResults(ar);
+	private void storeResults(AnalysisResult ar, boolean useDataBase) {
+		if (useDataBase) {
+			this.dbh.updatePlayStoreResults(ar);	
+		}
+		else {
+			this.offlineStoragePlayStoreResults(ar);
+		}
 	}
+	
+	private void offlineStoragePlayStoreResults(AnalysisResult ar) {
+		try {
+			File playStoreResultData = new File(this.playStoreResultData);
+			FileOutputStream fos = new FileOutputStream(playStoreResultData, true);
+			OutputStreamWriter osr = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+			BufferedWriter out = new BufferedWriter(osr);
+	
+			out.write(ar.pkg_name + ";" + ar.starRating + ";" + ar.category + ";" + ar.lastUpdateDate + ";" + ar.requiresVersion + ";" + ar.numberOfDownloads + ";" + ar.currentVersion + ";" + ar.contentRating + ";" + ar.offeredBy + ";" + ar.contactMail + ";" + ar.appName + "\n");
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}	
 }
