@@ -42,6 +42,7 @@ public class AnalysisResult {
 	public String starRating = "";
 	public String category = "";
 	public String lastUpdateDate = "";
+	public String creationDate = "";
 	public String requiresVersion = "";
 	public String numberOfDownloads = "";
 	public String currentVersion = "";
@@ -91,6 +92,7 @@ public class AnalysisResult {
 		sb.append("AnalysisResult: " + "starRating:\t" + this.starRating + "\n");
 		sb.append("AnalysisResult: " + "category:\t" + this.category + "\n");
 		sb.append("AnalysisResult: " + "lastUpdateDate:\t" + this.lastUpdateDate + "\n");
+		sb.append("AnalysisResult: " + "creationDate:\t" + this.creationDate + "\n");
 		sb.append("AnalysisResult: " + "requiresVersion:\t" + this.requiresVersion + "\n");
 		sb.append("AnalysisResult: " + "numberOfDownloads:\t" + this.numberOfDownloads + "\n");
 		sb.append("AnalysisResult: " + "currentVersion:\t" + this.currentVersion + "\n");

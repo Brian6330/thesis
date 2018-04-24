@@ -164,7 +164,11 @@ public class Main_PlayStore {
 	
 		    String line;
 			while ((line = in.readLine()) != null) {
-				al.add(line);
+				if (line.equals("")) {
+					al.add("https://www.google.com/");
+				} else {
+					al.add(line);					
+				}
 			}
 			
 			in.close();
