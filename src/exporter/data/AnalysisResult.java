@@ -50,6 +50,7 @@ public class AnalysisResult {
 	public String offeredBy = "";
 	public String contactMail = "";
 	public String appName = "";
+	public String releaseCount = "";
 	
 	public String targetsVersion = "";
 	public String requiresVersionYml = "";
@@ -100,6 +101,7 @@ public class AnalysisResult {
 		sb.append("AnalysisResult: " + "offeredBy:\t" + this.offeredBy + "\n");
 		sb.append("AnalysisResult: " + "contactMail:\t" + this.contactMail + "\n");
 		sb.append("AnalysisResult: " + "appName:\t" + this.appName + "\n");
+		sb.append("AnalysisResult: " + "releaseCount:\t" + this.releaseCount + "\n");
 		
 		sb.append("AnalysisResult: " + "targetsVersion:\t" + this.targetsVersion + "\n");
 		sb.append("AnalysisResult: " + "requiresVersionYml:\t" + this.requiresVersionYml + "\n");

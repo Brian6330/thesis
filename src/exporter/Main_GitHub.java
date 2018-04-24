@@ -50,6 +50,7 @@ public class Main_GitHub {
 	
 	private AnalysisResult scrapeGitHubJson(String pkg, String url) {
 		String httpsURL = url + this.tokenStr;
+		String httpsReleaseURL = url + "/releases" + this.tokenStr;
 		AnalysisResult ar = new AnalysisResult();
 		ar.pkg_name = pkg;
 		
@@ -71,18 +72,20 @@ public class Main_GitHub {
 		   
 		    while ((line = in.readLine()) != null) {
 		    	Matcher m1 = p1.matcher(line);
-				if (m1.find() && ar.starRating.equals("")) {
+				if (m1.find()) {
 					ar.creationDate = m1.group(1);
 				}
 				
 				Matcher m2 = p2.matcher(line);
-				if (m2.find() && ar.category.equals("")) {
+				if (m2.find()) {
 					ar.lastUpdateDate = m2.group(1);
 				}
 			}
 			
 			in.close();
-			
+			isr.close();
+			ins.close();
+			con.disconnect();
 			
 		} catch (IOException e) {
 			ar.starRating = "PAGE_INEXISTENT";
@@ -96,6 +99,45 @@ public class Main_GitHub {
 			ar.contactMail = "PAGE_INEXISTENT";
 			ar.appName = "PAGE_INEXISTENT";
 			ar.creationDate = "PAGE_INEXISTENT";
+			ar.releaseCount = "PAGE_INEXISTENT";
+			System.out.println("Main_GitHub: Received FileNotFound error for " + ar.pkg_name);
+		}
+		
+		
+		try { 
+			URL myurl = new URL(httpsReleaseURL);
+		    HttpsURLConnection con = (HttpsURLConnection)myurl.openConnection();
+		    InputStream ins = con.getInputStream();
+		    InputStreamReader isr = new InputStreamReader(ins);
+			
+//			File playStoreSampleContent = new File("sample_playstore.html");
+//			FileInputStream fis = new FileInputStream(playStoreSampleContent);
+//			InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
+		   
+			BufferedReader in = new BufferedReader(isr);
+			// "assets_url":
+			String line;
+		    Pattern p1 = Pattern.compile("\"(assets_url)\":");
+		    		   
+		    while ((line = in.readLine()) != null) {
+		    	Matcher m1 = p1.matcher(line);
+		    	
+		    	
+		    	int releases = 0;
+		    	while (m1.find()) {
+		    		releases++;
+		    	}
+		    		
+				ar.releaseCount = String.valueOf(releases);
+			}
+			
+			in.close();
+			isr.close();
+			ins.close();
+			con.disconnect();
+			
+		} catch (IOException e) {
+			ar.releaseCount = "PAGE_INEXISTENT";
 			System.out.println("Main_GitHub: Received FileNotFound error for " + ar.pkg_name);
 		}
 		
@@ -138,7 +180,7 @@ public class Main_GitHub {
 			OutputStreamWriter osr = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
 			BufferedWriter out = new BufferedWriter(osr);
 	
-			out.write(ar.pkg_name + ";" + ar.creationDate + ";" + ar.lastUpdateDate + "\n");
+			out.write(ar.pkg_name + ";" + ar.creationDate + ";" + ar.lastUpdateDate + ";" + ar.releaseCount + "\n");
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
